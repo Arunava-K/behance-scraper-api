@@ -1,23 +1,17 @@
-from flask import Flask, request, jsonify
-from scraper import scrape_behance_projects
+import os
+from flask import Flask
 
 app = Flask(__name__)
 
-@app.route("/")
-def index():
-    return "✅ Behance Scraper API running."
+@app.route('/')
+def home():
+    return "Hello, World!"
 
-@app.route("/scrape-behance", methods=["GET"])
+@app.route('/scrape')
 def scrape():
-    username = request.args.get("username")
-    if not username:
-        return jsonify({"error": "Missing username"}), 400
-
-    try:
-        data = scrape_behance_projects(username)
-        return jsonify(data)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    # Your scraping logic
+    return {"status": "success"}
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # get PORT from Render
+    app.run(host='0.0.0.0', port=port, debug=False)
